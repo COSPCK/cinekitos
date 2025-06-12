@@ -1,100 +1,225 @@
 <?php
-error_reporting(0);
-$appservlang = $_GET['appservlang'];
-switch ($appservlang) {
-	case "th" :
-		$appservlang = "th";
-	break;
-	default :
-		$appservlang = "en";
-	break;
-}
-/************************************************************************/
-/* AppServ Open Project                                          */
-/* ===========================                                          */
-/*                                                                      */
-/* Copyright (c) 2001 by Phanupong Panyadee (http://www.appservnetwork.com)         */
-/* http://www.appservnetwork.com                                             */
-/*                                                                      */
-/* This program is free software. You can redistribute it and/or modify */
-/* it under the terms of the GNU General Public License as published by */
-/* the Free Software Foundation; either version 2 of the License.       */
-/************************************************************************/
-include("appserv/main.php");
+ // Incluimos el archivo de conexión para poder interactuar con la base de datos.
+ include 'conexion.php';
 
-$phpver=phpversion();
-print "<html>
+ // Preparamos la consulta SQL para obtener todas las películas de la tabla 'Peliculas'.
+ $sql = "SELECT id_pelicula, imagen, titulo, descripcion, duracion_minutos, genero FROM Peliculas";
+ $result = $conn->query($sql);
+ ?>
+<!DOCTYPE html>
+<html lang="es">
 <head>
-<title>AppServ Open Project "._APPVERSION."</title>
-<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">
-<style>
-<!-- Hide style for old browsers 
-BODY          {font-family: Tahoma;font-size=\"10\"}
-.headd { font-family: Tahoma ; font-size: 13pt; text-decoration:  none; }
-.app { font-family: Tahoma ; font-size: 13pt; text-decoration:  none; }
-.supp { font-family: Tahoma ; font-size: 20pt; text-decoration:  none; }
-A:link    {font-family: Tahoma ; text-decoration: none; color: #0000FF}
-A:visited {font-family: Tahoma ; text-decoration: none; color: #0000FF}
-A:hover   {font-family: Tahoma ; text-decoration: none; color: #FF0000}
-A:active  {font-family: Tahoma ; text-decoration: none; color: #FF0000}
--->
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineDB - Tu portal de cine</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+
+    <link rel="stylesheet" href="estilos.css">
 </head>
-<body bgcolor=\"#FFFFFF\">
+<body>
 
-  <table border=\"0\" width=\"900\" align=\"center\" height=\"19\" >
-    <tr bgcolor=\"#D2E9FF\"> 
-      <td width=\"100%\" height=\"90\" align=\"center\" valign=\"absmiddle\"><font color=\"#000080\">
-	  <span class=\"headd\"><strong><big>&nbsp; The AppServ Open Project - "._APPVERSION." "._FOR." "._OS." <br>Now you running on <font color=\"#FF0000\">PHP $phpver</font></big></strong></span></font></td>
-    </tr>
-  </table>
+    <header class="header">
+        <div class="logo-container">
+            <img src="https://placehold.co/150x50/1a1a2e/ffffff?text=CineDB" alt="Logo CineDB" class="logo">
+            <span class="nombre-cine">CineDB</span>
+        </div>
+        <nav class="navbar">
+            <a href="#inicio" class="nav-link active">Inicio</a>
+            <a href="#cartelera" class="nav-link">Cartelera</a>
+            <a href="#proximamente" class="nav-link">Próximamente</a>
+            <a href="#contacto" class="nav-link">Contacto</a>
+        </nav>
+        <button class="btn-login">Iniciar Sesión</button>
+    </header>
 
-<div align=\"center\"> 
-  <table width=\"800\" border=\"0\">
-    <tr bgcolor=\"#F9FBFF\"> 
-      <td height=\"344\"> 
-        <blockquote> 
-          <p><font color=\"#000080\"><span class=\"headd\"><strong><br>
-	            <img src=\"appserv/members.gif\" width=\"20\"
-    height=\"20\" align=\"absmiddle\"> <span class=\"app\"><a href=\""._LPHPMYADMIN."/\">"._PHPMYADMIN." "._VERSION." "._VPHPMYADMIN."</a><br>
-	            <img
-    src=\"appserv/PHP-logo.gif\" width=\"40\" height=\"21\" align=\"absmiddle\"> <a href=\"phpinfo.php\">"._PHPINFO." "._VERSION."</a> <br>
-   </strong></span></font> </p>
-          <p><span class=\"app\"><u>"._ABOUT." "._APPSERV." "._VERSION." "._APPVERSION." "._FOR." "._OS."</u><br>
-            "._APPSERV." "._IS." <br><blockquote>
-            <li><b><a href=\"http://httpd.apache.org\" target=\"_blank\"> "._APACHE."</b> "._VERSION." <b>"._VAPACHE."</b></a><br>
-            <li><b><a href=\"http://www.php.net\" target=\"_blank\">"._PHP."</b> "._VERSION." <b>"._VPHP7."</b></a><br>
-            <li><b><a href=\"http://www.mysql.com\" target=\"_blank\">"._MYSQL."</b> "._VERSION." <b>"._VMYSQL."</b></a><br>
-            <li><b><a href=\"http://www.phpmyadmin.net\" target=\"_blank\">"._PHPMYADMIN."</b> "._VERSION." <b>"._VPHPMYADMIN."</b></a><br>
-			</blockquote>
-			</span> 
-          </p>
-        </blockquote>
-        <ul>
-          <li><a href=\"appserv/ChangeLog.txt\"><span class=\"app\">"._CHANGELOG."</span></a></li>
-          <li> <a href=\"appserv/README-$appservlang.php?appservlang=$appservlang\"><span class=\"app\">"._README."</span></a></li>
-          <li><a href=\"appserv/AUTHORS.txt\"><span class=\"app\">"._AUTHOR."</span></a></li>
-          <li><a href=\"appserv/COPYING.txt\"><span class=\"app\">"._COPYING."</span></a></li>
-		 </li> </ul></span>
-          <span class=\"supp\"><b>"._OFSITE." : </b> <a href=\"http://www.AppServ.org/?appserv-"._APPVERSION."\" target=\"_blank\">http://www.AppServ.org</a><br></span>
-          <span class=\"supp\"><b>"._HSUP." :</b> <a href=\"http://www.AppServHosting.com/?appserv-"._APPVERSION."\" target=\"_blank\">http://www.AppServHosting.com</a>  </span>
-<br>
-<br>
-<span class=\"app\"><b> "._LANG." : </b><a href=\"index.php?appservlang=en\"><img src=\"appserv/flag-english.png\" width=\"30\" height=\"16\" align=\"absmiddle\" border=\"0\"></a>&nbsp; <a href=\"index.php?appservlang=th\"><img src=\"appserv/flag-thai.png\" width=\"30\" height=\"16\" align=\"absmiddle\" border=\"0\"></a>
-<br><br>
-      </td>
-    </tr>
-  </table>  
+    <main>
+        <section id="inicio" class="carousel-section">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" style="background-image: url('https://placehold.co/1200x500/E94560/ffffff?text=Promoción+Martes+2x1');">
+                        <div class="slide-content"><h2>¡Martes de 2x1!</h2><p>Disfruta de tus películas favoritas.</p></div>
+                    </div>
+                    <div class="swiper-slide" style="background-image: url('https://placehold.co/1200x500/16213E/ffffff?text=Estreno+del+Mes');">
+                               <div class="slide-content"><h2>Estreno del Mes</h2><p>No te pierdas los blockbusters.</p></div>
+                    </div>
+                    <div class="swiper-slide" style="background-image: url('https://placehold.co/1200x500/0F3460/ffffff?text=Combo+Perfecto');">
+                               <div class="slide-content"><h2>El Combo Perfecto</h2><p>Palomitas y refresco para una experiencia completa.</p></div>
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </section>
 
-  <table border=\"0\" width=\"900\" align=\"center\" height=\"19\" >
-    <tr> 
-	  <td width=\"100%\" height=\"60\" align=\"center\" valign=\"absmiddle\" bgcolor=\"#D2E9FF\">
-	  <font color=\"#000080\" class=\"headd\">&nbsp;&nbsp;&nbsp;<img src=\"appserv/softicon.gif\" width=\"20\" height=\"20\" align=\"absmiddle\">&nbsp;<b>"._SLOGAN."</b> </font></td>
-    </tr>
-  </table>
+        <section id="cartelera" class="cartelera-section">
+            <h2 class="section-title">En Cartelera</h2>
+            <div class="cartelera-grid">
+                <?php
+                if ($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                ?>
+                        <div class="movie-card">
+                            <div class="movie-image-container">
+                                <img src="<?php echo htmlspecialchars($row['imagen'] ? $row['imagen'] : 'https://placehold.co/300x450/1a1a2e/ffffff?text=Poster'); ?>" alt="Poster de <?php echo htmlspecialchars($row['titulo']); ?>" class="movie-image">
+                            </div>
+                            <div class="movie-info">
+                                <h3 class="movie-title"><?php echo htmlspecialchars($row['titulo']); ?></h3>
+                                <p class="movie-description"><?php echo htmlspecialchars($row['descripcion']); ?></p>
+                                <div class="movie-details">
+                                    <span class="movie-genre"><?php echo htmlspecialchars($row['genero']); ?></span>
+                                    <span class="movie-duration"><?php echo htmlspecialchars($row['duracion_minutos']); ?> min</span>
+                                </div>
+                                <button class="btn-comprar" data-idpelicula="<?php echo $row['id_pelicula']; ?>" data-titulo="<?php echo htmlspecialchars($row['titulo']); ?>" type="button">Comprar Boletos</button>
+                            </div>
+                        </div>
+                <?php
+                    }
+                } else {
+                    echo "<p>No hay películas en cartelera.</p>";
+                }
+                ?>
+            </div>
+        </section>
+    </main>
 
+    <div id="compra-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <button class="modal-close-btn">&times;</button>
+            <h2 id="modal-movie-title">Comprar Boletos</h2>
+            <form id="compra-form">
+                <input type="hidden" id="modal-id-pelicula" name="id_pelicula">
 
+                <div class="form-step">
+                    <div class="form-group">
+                        <label for="cine-select">1. Selecciona un cine:</label>
+                        <select id="cine-select" name="id_cine" class="form-control" disabled>
+                            <option value="">Cargando cines...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="funcion-select">2. Selecciona un horario:</label>
+                        <select id="funcion-select" name="id_funcion" class="form-control" disabled>
+                            <option value="">Selecciona un cine primero</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="asientos-container" class="form-step" style="display:none;">
+                    <label>3. Selecciona tus asientos:</label>
+                    <div class="leyenda-asientos">
+                        <span><span class="asiento-ejemplo disponible"></span> Disponible</span>
+                        <span><span class="asiento-ejemplo ocupado"></span> Ocupado</span>
+                        <span><span class="asiento-ejemplo seleccionado"></span> Seleccionado</span>
+                    </div>
+                    <div class="pantalla-cine">PANTALLA</div>
+                    <div id="asientos-mapa" class="asientos-mapa">
+                        </div>
+                </div>
+
+                <div id="pago-container" class="form-step" style="display:none;">
+                    <label>4. Elige tu método de pago:</label>
+                    <div class="pago-opciones">
+                        <input type="radio" id="pago-tarjeta" name="tipo_pago" value="Tarjeta" checked>
+                        <label for="pago-tarjeta">Tarjeta</label>
+                        <input type="radio" id="pago-efectivo" name="tipo_pago" value="Efectivo">
+                        <label for="pago-efectivo">Efectivo</label>
+                    </div>
+                    <div id="tarjeta-form" class="form-group-grid">
+                        <input type="text" name="tarjeta_num" placeholder="Número de Tarjeta (16 dígitos)" class="form-control" required>
+                        <input type="text" name="tarjeta_nombre" placeholder="Nombre en la Tarjeta" class="form-control" required>
+                        <input type="text" name="tarjeta_exp" placeholder="MM/AA" class="form-control" required>
+                        <input type="text" name="tarjeta_cvv" placeholder="CVV" class="form-control" required>
+                    </div>
+                    <div id="efectivo-msg" style="display:none;">
+                        <p>Paga en la caja del cine antes de la función. Muestra tu folio de compra.</p>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                        <p>Total: <span id="precio-total">$0.00</span></p>
+                    <button type="submit" id="btn-completar-compra" class="btn-comprar" disabled>Completar Compra</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="ticket-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content ticket-content">
+            <button class="modal-close-btn ticket-close-btn">&times;</button>
+            <div id="ticket-info">
+                </div>
+            <div class="modal-footer">
+                <button id="btn-descargar-ticket" class="btn-comprar" type="button"><i class="fas fa-download"></i> Descargar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="login-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <button class="modal-close-btn">&times;</button>
+            <h2>Iniciar Sesión</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-username">Usuario o Email:</label>
+                    <input type="text" id="login-username" name="nombre_usuario" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Contraseña:</label>
+                    <input type="password" id="login-password" name="contrasena" class="form-control" required>
+                </div>
+                <p id="login-message" class="error-message"></p>
+                <button type="submit" class="btn-ingresar">Ingresar</button>
+                <p class="mt-3">¿No tienes cuenta? <a href="#" id="show-register-modal">Regístrate aquí</a></p>
+            </form>
+        </div>
+    </div>
+
+    <div id="register-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <button class="modal-close-btn">&times;</button>
+            <h2>Registrarse</h2>
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="register-username">Nombre de Usuario:</label>
+                    <input type="text" id="register-username" name="nombre_usuario" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email:</label>
+                    <input type="email" id="register-email" name="email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Contraseña:</label>
+                    <input type="password" id="register-password" name="contrasena" class="form-control" required>
+                </div>
+                <p id="register-message" class="error-message"></p>
+                <button type="submit" class="btn-comprar">Registrarse</button>
+                <p class="mt-3">¿Ya tienes cuenta? <a href="#" id="show-login-modal">Inicia sesión</a></p>
+            </form>
+        </div>
+    </div>
+
+    <div id="user-options-modal" class="modal">
+    <div class="modal-content">
+        <span class="modal-close-btn">&times;</span>
+        <h2>Opciones de Usuario</h2>
+        <div class="modal-body">
+            <button id="btn-logout" class="btn btn-primary" type="button">Cerrar Sesión</button>
+            <button id="btn-switch-account" class="btn btn-secondary" type="button">Cambiar Cuenta</button>
+        </div>
+    </div>
+</div>
+
+    <?php $conn->close(); ?>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="scripts.js"></script>
 </body>
 </html>
-";
-?>
